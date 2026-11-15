@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+.env.*
+*.local
+# Client-specific env files
+client/.env
+client/.env.local
+client/.env.*
+# Server-specific env files (also covered by server/.gitignore)
+server/.env
+server/.env.local
+server/.env.*
+# Allow safe example files only
+!.env.example
+!client/.env.example
+!server/.env.example
+# Firebase service account credentials and private keys
+server/config/serviceAccountKey.json
+serviceAccountKey.json
+*credentials*.json
+*service-account*.json
+*.pem
+*.key
+
+# Build & Distribution
+client/dist/
+dist/
+dist-ssr/
+
+# Uploads and temporary storage
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Logs & Editor
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+
+
+# Local test files
+test-document.txt
+client_screenshot_*.png
