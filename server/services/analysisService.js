@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const { generateWithRetry } = require('./geminiClient');
 const { analysisSchema } = require('../validators/analysisSchema');
 const { verifyAnalysisEvidence } = require('./evidenceverifier');
-const createLocalFallback = require('./localFallback');
+const createLocalFallback = require('./localfallback');
 
 // In-memory cache and in-flight deduplication for analyses
 const analysisCache = new Map();

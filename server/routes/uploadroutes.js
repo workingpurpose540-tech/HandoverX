@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const verifyFirebaseToken = require('../middleware/verifyFirebaseToken');
 const upload = require('../middleware/upload');
-const extractText = require('../services/documentExtractor');
+const extractText = require('../services/documentextractor');
 const analyzeDocuments = require('../services/analysisService');
 const { generateHandoverReport } = require('../services/reportGenerator');
 
