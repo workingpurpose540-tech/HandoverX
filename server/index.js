@@ -6,8 +6,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-const uploadRoutes = require('./routes/uploadRoutes');
-const projectRoutes = require('./routes/projectRoutes');
+const uploadRoutes = require('./routes/uploadroutes');
+const projectRoutes = require('./routes/projectroutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
