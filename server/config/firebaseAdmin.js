@@ -1,23 +1,34 @@
 const { initializeApp, getApps, cert } = require('firebase-admin/app');
 const { getAuth } = require('firebase-admin/auth');
 const { getFirestore } = require('firebase-admin/firestore');
-const serviceAccount = require('./serviceAccountKey.json');
 
-const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+let firebaseApp;
 
-if (
-    !process.env.FIREBASE_PROJECT_ID ||
-    !process.env.FIREBASE_CLIENT_EMAIL ||
-    !privateKey
-) {
-    throw new Error('Firebase environment variables are missing.');
+if (getApps().length === 0) {
+    const projectId = process.env.FIREBASE_PROJECT_ID;
+    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+    // Strip surrounding quotes that some env-var editors add, then convert
+    // escaped newline sequences to real newlines for PEM compatibility.
+    const rawKey = process.env.FIREBASE_PRIVATE_KEY;
+    const privateKey = rawKey
+        ? rawKey.replace(/^["']|["'],?$/g, '').replace(/\\n/g, '\n')
+        : undefined;
+
+    if (projectId && clientEmail && privateKey) {
+        // Production (Render): initialise from environment variables.
+        firebaseApp = initializeApp({
+            credential: cert({ projectId, clientEmail, privateKey }),
+        });
+    } else {
+        // Local development: fall back to the service-account key file.
+        const serviceAccount = require('./serviceAccountKey.json');
+        firebaseApp = initializeApp({
+            credential: cert(serviceAccount),
+        });
+    }
+} else {
+    firebaseApp = getApps()[0];
 }
-
-const firebaseApp = getApps().length
-    ? getApps()[0]
-    : initializeApp({
-        credential: cert(serviceAccount)
-    });
 
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
