@@ -15,7 +15,7 @@ async function verifyFirebaseToken(req, res, next) {
         });
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.slice(7).trim();
 
     try {
         const decodedToken = await auth.verifyIdToken(token);
@@ -28,6 +28,7 @@ async function verifyFirebaseToken(req, res, next) {
         next();
 
     } catch (error) {
+        console.error('Firebase token verification failed:', error.code || error.message);
         return res.status(401).json({
             success: false,
             message: 'Invalid or expired authentication token.'

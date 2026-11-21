@@ -4,15 +4,18 @@ const { getFirestore } = require('firebase-admin/firestore');
 
 let firebaseApp;
 
+function cleanEnvValue(value) {
+    if (!value || typeof value !== 'string') return undefined;
+    const trimmed = value.trim();
+    if (!trimmed) return undefined;
+    return trimmed.replace(/^["']|["'],?$/g, '').trim();
+}
+
 if (getApps().length === 0) {
-    const projectId = process.env.FIREBASE_PROJECT_ID;
-    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-    // Strip surrounding quotes that some env-var editors add, then convert
-    // escaped newline sequences to real newlines for PEM compatibility.
-    const rawKey = process.env.FIREBASE_PRIVATE_KEY;
-    const privateKey = rawKey
-        ? rawKey.replace(/^["']|["'],?$/g, '').replace(/\\n/g, '\n')
-        : undefined;
+    const projectId = cleanEnvValue(process.env.FIREBASE_PROJECT_ID);
+    const clientEmail = cleanEnvValue(process.env.FIREBASE_CLIENT_EMAIL);
+    const rawKey = cleanEnvValue(process.env.FIREBASE_PRIVATE_KEY);
+    const privateKey = rawKey ? rawKey.replace(/\\n/g, '\n') : undefined;
 
     if (projectId && clientEmail && privateKey) {
         // Production (Render): initialise from environment variables.
