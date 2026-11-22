@@ -171,9 +171,14 @@ export interface UploadDocumentsResponse {
   report: string;
 }
 
+
 const getApiBaseUrl = (): string => {
-  return import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  return import.meta.env.VITE_API_URL ||
+    (import.meta.env.PROD
+      ? 'https://handoverx-backend.onrender.com'
+      : 'http://localhost:5000');
 };
+
 
 // ==========================================
 // Network-Resilient Request Wrapper
@@ -256,10 +261,10 @@ async function requestApi<T>(
       (response.status === 401
         ? 'Invalid or expired authentication session. Please sign in again.'
         : response.status === 403
-        ? 'You do not have access to this project or resource.'
-        : response.status === 404
-        ? 'The requested resource was not found on the server.'
-        : `Request failed with HTTP status ${response.status}.`);
+          ? 'You do not have access to this project or resource.'
+          : response.status === 404
+            ? 'The requested resource was not found on the server.'
+            : `Request failed with HTTP status ${response.status}.`);
 
     throw new Error(errorMsg);
   }
