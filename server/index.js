@@ -12,9 +12,10 @@ const projectRoutes = require('./routes/projectroutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Dynamic CORS configuration supporting local dev origins (localhost & 127.0.0.1 on any port)
+// Dynamic CORS configuration supporting production Vercel frontend and local dev origins
 const allowedOrigins = [
     process.env.CLIENT_URL,
+    'https://handover-x.vercel.app',
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'http://localhost:5174',
@@ -23,7 +24,9 @@ const allowedOrigins = [
     'http://127.0.0.1:4173',
     'http://localhost:3000',
     'http://127.0.0.1:3000'
-].filter(Boolean);
+]
+    .filter(Boolean)
+    .map((origin) => origin.replace(/^["']|["']$/g, '').replace(/\/+$/, '').trim());
 
 const corsOptions = {
     origin: function (origin, callback) {
